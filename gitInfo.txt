@@ -94,6 +94,7 @@ git pull -r origin main
 #この時、ローカルリポジトリの内容と違うとCONFLICTが発生する（ステージングされていないファイル及びコミットされていないファイルがあると、pull自体失敗する）
 #手元でコンフリクトの解消を行う必要がある
 #vscodeだと、Accept Current Changeを押すとローカルの内容に戻る？viだと手動削除、vimだとなんか機能があるらしい？
+#>>>>>>HEADから=====までがリモートの内容？で、
 #修正後、commit、git rebase --continue、pushを行う
 #pullは、fetchとmergeを行なっている(chatGPT調べ)
 
