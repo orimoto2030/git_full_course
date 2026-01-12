@@ -1,0 +1,111 @@
+#以下のサイトを参考にgitを学んだ
+https://qiita.com/Sicut_study/items/0318cc136c189b179b7f
+
+#gitはmacにデフォルトでインストールされている
+#gitのバージョン確認
+git version
+
+#gitの初期設定 ユーザー名とメアドをglobalで登録、PCのどこでgitを利用してもこのユーザー情報が付与される
+git config --global user.name "orimoto2030"
+git config --global user.email orimoto2030@gmail.com
+
+#githubにssh接続するための設定
+cd ~/.ssh
+ssh-keygen -t rsa
+
+#id_rsaが秘密鍵、id_rsa.pubが公開鍵
+ls ~/.ssh
+
+#公開鍵の内容をクリップボードにコピー
+pbcopy < ~/.ssh/id_rsa.pub
+
+#githubにて、右上のアイコンからSettings->SSH and GPG keys->New SSH Key
+#Titleはなんでも良く、Keyにクリップボードの内容を貼り付け->Add SSH key
+
+#ssh接続が可能か確認
+ssh -T git@github.com
+
+#リポジトリの作成
+mkdir git_handson
+cd git_handson
+git init
+
+#.gitにプロジェクトのバージョン管理に関する情報が含まれているので、.gitを削除するとgitリポジトリではないと言われる
+#.gitを削除したら再度git init
+
+#ローカルリポジトリへの変更前に、ステージングへ追加する
+git add [ファイル名]
+
+#ローカルリポジトリへ変更を加える
+git commit -m "どのような変更をしたかのメッセージ"
+
+#リモートリポジトリへ反映させる
+git push origin main
+#originはリモートリポジトリのことをさしているらしい？
+#mainはmainブランチを指す
+
+#リモートリポジトリの変更を取得する場合
+git pull origin main
+
+#リモートリポジトリの作成は、githubにて、右上のアイコンからrepositories->New->Repository nameを入力->Create repository
+#ローカルリポジトリとリモートリポジトリを同期させる
+#Quick setupの中から以下の行を実行
+git branch -M main
+git remote add origin https:/.......
+
+#ただし、ssh接続したいので、git remote add origin https:/......の行を以下のように修正
+git remote set-url origin git@github.com:orimoto2030/git_full_course.git
+#originの後はおそらく、githubのurlであり、git@github.com:アカウント名/リポジトリ名
+
+#コミットは細かくすることで、ピンポイントで取り消したいコミットをなくすことができる(revert)
+
+#ここからは必要な情報
+#コミットされたファイル内容と現在のファイル内容の変更点を確認
+git diff
+-の行がコミットされたファイル内容
++の行が現在のファイル内容
+
+#練習では間違ったファイルをステージングにaddした
+#間違ったファイルをステージングから戻す
+git restore --staged [ファイル名]
+
+#間違ったファイル内容をコミットされたファイル内容に修正
+git checkout [ファイル名]
+
+#ファイルをgitの対象外にする
+git rm --cached [ファイル名]
+#--cachedがないと、ファイルの削除まで行われる、ディレクトリの場合は-rをつける
+
+#gitの管理対象外にするには.gitignoreファイルを作成し、ファイル名やディレクトリ名を書く
+#その後、add commit pushを忘れずに。ただし、一度pushされた情報はクラウドに履歴が残るので、秘密の情報は.gitignoreに追加するのを忘れてはいけない
+
+#履歴の確認
+git log
+
+#リモートリポジトリに変更が加えられるとgit pushでエラーが起きる
+#リモートリポジトリの最新のコードをローカルに持ってくる
+git pull -r origin main
+#この時、ローカルリポジトリの内容？と違うとCONFLICTが発生する
+#手元でコンフリクトの解消を行う必要がある
+#vscodeだと、Accept Current Changeを押すとローカルの内容に戻る？viだと手動削除、vimだとなんか機能があるらしい？
+#修正後、commit、git rebase --continue、pushを行う
+
+#ブランチの確認
+git branch
+
+#ブランチの作成、移動
+git branch -M [ブランチ名]
+
+#ブランチを移動したら、git push origin [ブランチ名]に注意
+
+#ブランチの移動
+git switch [ブランチ名]
+
+#githubで、mainをクリックすると、ブランチが表示される
+#変更をmainブランチにマージするには、Compare $ pull request->Create pull request->Merge pull request->Confirm Merge、不要になったブランチはDelete branchで削除
+#マージしたら、git switch main、git pull -r origin mainで反映させる
+
+#コミットの取り消しは、git log、git revert [logID]
+#エディタが開くので、Ctrl+Xなどで抜けたらコードが戻っている？
+
+#リベースはサイト見て
